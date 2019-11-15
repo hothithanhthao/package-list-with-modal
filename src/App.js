@@ -10,6 +10,16 @@ function App() {
   const [itemModalOpen, setItemModalOpen, toggleModal] = useModal()
   const [myinfo, setMyInfo] = useState([])
   
+  // compare function to sort package name alphabetically
+  const compare = (a, b) => {
+    let comparison = 0;
+    if (a.Package > b.Package) {
+      comparison = 1;
+    } else if (a.Package <b.Package) {
+      comparison = -1;
+    }
+    return comparison;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +28,7 @@ function App() {
       result.data.split('\n\n').map(entry => { 
       const obj = {}
       const arr = []
-     
+      const packageNames = []
       entry.split('\n').forEach(keyValue => {
         if (keyValue.match(/^[A-Z]/)) {  
           const split = keyValue.split(": ")
@@ -29,12 +39,12 @@ function App() {
         else{
           const value =  ["", keyValue.trim()];
           arr.push(value)
-        }
+        }      
       })
-
       const a = arr.join(" ").replace(/,/g, "\n")
       Object.assign(obj, {Description: obj.Description + a })
       myinfo.push(obj)
+      myinfo.sort(compare)
    })
     setMyInfo([...myinfo])
   };

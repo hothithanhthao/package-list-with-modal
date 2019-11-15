@@ -16,7 +16,8 @@ function PackageTable(props) {
         </tr>
       </thead>
       <tbody>
-        {data.map((row,i) => {
+        {data
+        .map((row,i) => {
           const { Package , Status, Priority } = row
           return (
             <tr key={i}>
