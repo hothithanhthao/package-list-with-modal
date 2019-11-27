@@ -1,39 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom';
 
 function PackageTable(props) {
-  const { data, setSelected, setModalState } = props
- // console.log(data)
+  const { data } = props
 
   return (
     <table className="table">
       <thead>
-        <tr>
+        <tr className="table100-head">
           <th>Package Name</th>
           <th>Status</th>
           <th>Priority</th>
-          <th>Action</th>
+          <th>Section</th>
         </tr>
       </thead>
       <tbody>
-        {data
-        .map((row,i) => {
-          const { Package , Status, Priority } = row
+        {data.map((row,i) => {
+          const { Package , Status, Priority, Section } = row
           return (
             <tr key={i}>
-              <td>{Package}</td>
+              <td className="link-text"><Link to={`/${Package}`}>{Package}</Link></td>
               <td>{Status}</td>
               <td>{Priority}</td>
-              <td>
-                <button
-                  onClick={() => {
-                    setSelected(row)
-                    setModalState(true)
-                  }}
-                >
-                  View
-                </button>
-              </td>
+              <td>{Section}</td> 
             </tr>
           )
         })}
@@ -44,8 +34,6 @@ function PackageTable(props) {
 
 PackageTable.propTypes = {
   data: PropTypes.array,
-  setSelected: PropTypes.func.isRequired,
-  setModalState: PropTypes.func.isRequired
 }
 
 export default PackageTable

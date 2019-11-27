@@ -1,20 +1,28 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 
-function PackageDetail(props) {
-  const { data } = props
-  if (!data) return null
+const PackageDetail = ({match,data}) => {
+  
+  const mypackage = data.find(p => p.Package === match.params.Package);
+ 
+  if (!mypackage) return null
+  
   return (
-    <div>
-     <h4>Package Name: {data.Package}</h4>
-     <h4>Package Depends: {data.Depends}</h4>
-     <h4>Package Description: {data.Description}</h4>
+    <div className="package-detail">
+  
+     <h4>Package Name: </h4>{mypackage.Package}
+     <h4>Package Depends:</h4>
+       {mypackage.Depends?
+        [ /[,\\|]/.test( mypackage.Depends) ? mypackage.Depends.replace(/ *\([^)]*\) */g, "").split(/[,\\|]/).map((e,i) => (
+              
+               <Link className="link-text" key={i} to={`/${e.trim()}`}>{e}</Link>
+          )):
+          <Link className="link-text" to={`/${mypackage.Depends.trim().replace(/ *\([^)]*\) */g, "")}`}>{mypackage.Depends.replace(/ *\([^)]*\) */g, "")}</Link>
+        ]:null} 
+     <h4>Package Description: </h4>{mypackage.Description}
     </div>
-  )
-}
+  );
+};
+ 
 
-PackageDetail.propTypes = {
-  data: PropTypes.object
-}
-
-export default PackageDetail
+export default PackageDetail 

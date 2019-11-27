@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useModal } from './hook'
-import CustomModal from './modal'
+
 import Package from './component/Package'
 import axios from 'axios';
 import myText from './status.txt';
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import PackageDetail from './component/PackageDetail';
 
 
 function App() {
-  const [itemModalOpen, setItemModalOpen, toggleModal] = useModal()
+  
   const [myinfo, setMyInfo] = useState([])
   
   // compare function to sort package name alphabetically
@@ -28,7 +29,7 @@ function App() {
       result.data.split('\n\n').map(entry => { 
       const obj = {}
       const arr = []
-      const packageNames = []
+
       entry.split('\n').forEach(keyValue => {
         if (keyValue.match(/^[A-Z]/)) {  
           const split = keyValue.split(": ")
@@ -47,22 +48,20 @@ function App() {
       myinfo.sort(compare)
    })
     setMyInfo([...myinfo])
+    
   };
     fetchData()
   }, []);
 
- 
 
   return (
     <div className="App">
-      <CustomModal
-          title="Item Modal"
-          isActive={itemModalOpen}
-          handleClose={() => setItemModalOpen(false)}
-      >
-        <h2>Hey Modal</h2>       
-      </CustomModal>
-      <Package data={myinfo} />
+      <Router>
+        <Switch>
+          <Route exact path={`/`} render={() => (<Package data ={myinfo}/>)} />
+          <Route path={`/:Package`} render={(props) => (<PackageDetail data ={myinfo}  {...props}/>)} />                
+        </Switch>
+      </Router>
     </div>
   );
 }
